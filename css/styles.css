@@ -9,16 +9,6 @@ body {
    flex-direction: column;
    height: 100%;
 }
-footer {
-   background-color:rgb(44, 16, 16);
-   height: 50px;
- }
-footer p {
-   color: rgb(207, 145, 148);
-}
-#copyright {
-   font-size: 0.9rem;
-}
 .container {
    background-color: white;   /* rgb(201, 71, 78); */
    border-left: 2px solid rgb(201, 71, 78);
@@ -26,6 +16,7 @@ footer p {
    margin-bottom: 0px;
    padding-bottom: 0px;
 }
+
 #header {
    background-color: rgb(201, 71, 78);
 }
@@ -35,10 +26,32 @@ footer p {
 }
 #site_title {
    font-family:'Great Vibes', Helvetica, sans-serif;
+   font-size: 24px;
    color: white;
+   margin-left: 20px;
    position: relative;
    top: 6px;
+   white-space: nowrap;
 }
+@media (max-width: 508px) {
+   #site_title {
+      font-family: Helvetica, sans-serif;
+      font-size: 16px;
+   }
+}
+
+footer {
+   background-color:rgb(44, 16, 16);
+   height: 65px;
+   padding: 10px;
+ }
+footer p {
+   color: rgb(207, 145, 148);
+}
+#copyright {
+   font-size: 0.9rem;
+}
+
 #overview_image {
    width: 230px;
    height: auto; 
@@ -63,6 +76,11 @@ footer p {
 .cart_controls {
    display: inline-block;
 }
+#cart_container {
+   float: right;
+   margin-left: 20px;
+}
+
 
 #choose_msg_col {
    color: white;

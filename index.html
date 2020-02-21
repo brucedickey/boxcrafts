@@ -42,11 +42,11 @@
     <div id="app">
         <b-container>
             <b-row id="header" class="pt-2 pb-2">
-                <b-col class md="12">
+                <b-col>
                     <b-img src="./img/box-of-valentine-hearts_458-370.png" 
                            alt="Image: square box cornucopia of hearts" id="header_image">
                     </b-img>
-                    <span id="site_title" class="h3 ml-3">Valentine's Day Subscription In A Box</span>
+                    <span id="site_title">Valentine's Day Subscription In A Box</span>
                 </b-col>
             </b-row>
             <b-row class="d-xs-block d-lg-none">
@@ -63,12 +63,24 @@
                     <b-form @submit="onSubmit" class="clearfix">
                         <b-form-group id="subscription" class="cart_controls">
                             <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
-                                            value="subscription" selected class="cart_controls cart_text mr-3">Subscription</b-form-radio>
+                                            value="subscription" selected 
+                                            class="cart_controls cart_text mr-3">
+                                Subscription
+                            </b-form-radio>
                             <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
-                                            value="onetime" class="cart_controls cart_text">One time purchase</b-form-radio>
+                                            value="onetime" class="cart_controls cart_text">
+                                One time purchase
+                            </b-form-radio>
                         </b-form-group>
-                        <b-button class="cart_controls float-right no-gutters ml-3" type="submit" variant="warning">Checkout</b-button>
-                        <span class="cart_controls cart_text float-right mr-2"><i class="text-primary fas fa-2x fa-shopping-cart"></i> 0 </span>
+                        <div id="cart_container" class="cart_controls">
+                           <b-button class="cart_controls float-right no-gutters ml-3" 
+                                     type="submit" variant="warning">Checkout
+                            </b-button>
+                           <span class="cart_controls cart_text float-right mr-2">
+                               <i class="text-primary fas fa-2x fa-shopping-cart"></i>
+                               0 
+                            </span>
+                        </div>
                     </b-form>
                 </b-col>
             </b-row>
@@ -90,9 +102,11 @@
             </b-row>
             <footer class="mt-3">
                 <b-row class="justify-content-center">
-                    <section class="mt-3">
-                        <p id="copyright">Copyright 2020, Unobtainium Box Crafts Inc., All Rights Reserved.</p>
-                    </section>
+                    <b-col>
+                        <p id="copyright" class="d-flex justify-content-center">
+                            Copyright 2020, Unobtainium Box Crafts Inc., All Rights Reserved.
+                        </p>
+                    </b-col>
                 </b-row>
             </footer>             
         </b-container>   
