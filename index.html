@@ -16,7 +16,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' unpkg.com *.fontawesome.com *.googleapis.com /> -->
+    <meta http-equiv="content-security-policy" 
+          content="default-src 'self' 'unsafe-inline' 'unsafe-eval' 
+                        http://use.fontawesome.com   https://unpkg.com  
+                        http://fonts.googleapis.com  https://fonts.gstatic.com;
+                   img-src 'self' data:; child-src 'none'; object-src 'none' " 
+    />
 
     <title>Valentine's Boxes</title>
 
