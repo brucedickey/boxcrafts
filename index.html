@@ -60,7 +60,7 @@
                 </b-col>
 
                 <b-col class="col=md-12 col-lg-3">
-                    <b-form @submit="onSubmit" class="clearfix">
+                    <b-form @submit="onCheckoutSubmit" class="clearfix">
                         <b-form-group id="subscription" class="cart_controls">
                             <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
                                             value="subscription" selected 
@@ -76,9 +76,9 @@
                            <b-button class="cart_controls float-right no-gutters ml-3" 
                                      type="submit" variant="warning">Checkout
                             </b-button>
-                           <span class="cart_controls cart_text float-right mr-2">
-                               <i class="text-primary fas fa-2x fa-shopping-cart"></i>
-                               0 
+                           <span class="cart_controls float-right mt-1 mr-2">
+                               <i id="shopping_cart" class="text-primary fas fa-shopping-cart"></i>
+                               {{ cart_item_count() }} 
                             </span>
                         </div>
                     </b-form>
@@ -96,7 +96,8 @@
                     v-for="(product, idx) in page.products"
                     :product="product"
                     :collection_image="theme_collection_image(product.selection_values.theme)"
-                    :update_theme="update_theme"
+                    :update_theme_stickers_image="update_theme_stickers_image"
+                    :add_to_cart="add_to_cart"
                     :key="product.id"
                 >
                 </product_panel>
@@ -175,7 +176,7 @@
         });
 
         Vue.component('product_panel', {
-            props: ['product', 'collection_image', 'update_theme'],
+            props: ['product', 'collection_image', 'update_theme_stickers_image', 'add_to_cart'],
             template:
                    `<b-col class md="4" >
                         <b-card class="h-100 product_card"">
@@ -200,7 +201,9 @@
                                 </b-form-select>
                             </b-row>
                             <template v-if="product.in_stock">
-                                <b-button class="add_to_cart_btn mb-2" variant="warning">Add to Cart</b-button>
+                                <b-button class="add_to_cart_btn mb-2" variant="warning" @click="add_to_cart(product)">
+                                    Add to Cart
+                                </b-button>
                             </template>
                             <template v-else>
                                 <b-button class="disabled add_to_cart_btn mb-2" variant="warning">Add to Cart</b-button>
@@ -211,7 +214,7 @@
                                 <b-form-select class="h-100" 
                                     v-model="product.selection_values.theme"
                                     :options="product.card_themes"
-                                    v-on:change="update_theme($event, product)"
+                                    v-on:change="update_theme_stickers_image($event, product)"
                                 >
                                 </b-form-select>
                             </b-row>
@@ -232,14 +235,17 @@
             computed: {
             },
             methods: {
-                onSubmit() {
+                onCheckoutSubmit() {
                     return true;
                 },
                 theme_collection_image(theme_name) {
+                    // Return the theme collection image
+                    // Arg: product.selection_values.theme
                     return this.page.theme_images[theme_name].collection; 
                 },
-                update_theme(new_selection, product) {
-                    // Update the stickers image for the newly-selected theme.
+                update_theme_stickers_image(new_selection, product) {
+                    // Update the stickers image for the newly-selected theme for the current product.
+                    // (The theme collection image is updated via v-model.)
                     let theme = product.selection_values.theme;
                     let stickers_image = this.page.theme_images[theme].stickers;
                     for (let item of product.set_items) {
@@ -248,6 +254,13 @@
                             break;
                         }
                     }
+                },
+                add_to_cart(product) {
+                    let kit = JSON.parse(JSON.stringify(product.selection_values));
+                    this.cart.items.push(kit);
+                },
+                cart_item_count() {
+                    return this.cart.items.reduce((acc, cur) => acc + parseInt(cur.quantity, 10), 0);
                 }
             },        
             data: {

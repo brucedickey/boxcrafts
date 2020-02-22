@@ -80,7 +80,9 @@ footer p {
    float: right;
    margin-left: 20px;
 }
-
+#shopping_cart {
+   font-size: 1.6rem;
+}
 
 #choose_msg_col {
    color: white;
