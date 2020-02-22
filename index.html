@@ -95,10 +95,12 @@
                 <product_panel
                     v-for="(product, idx) in page.products"
                     :product="product"
-                    :idx="idx"
+                    :collection_image="theme_collection_image(product.selection_values.theme)"
+                    :update_theme="update_theme"
                     :key="product.id"
                 >
                 </product_panel>
+
             </b-row>
             <footer class="mt-3">
                 <b-row class="justify-content-center">
@@ -153,10 +155,10 @@
 
                             <template v-if="typeof item.description === 'string'" 
                             class="d-inline item">
-                                <span class="item_desc">{{item.description}} {{item.label}}</span>
+                                <span class="item_desc">{{item.description}}</span>
                             </template>
                             <template v-else-if="item.description.length === 1" class="d-inline">
-                                <span class="item_desc">{{item.description[0]}} {{item.label}}</span>
+                                <span class="item_desc">{{item.description[0]}}</span>
                             </template>
                             <template v-else>
                                 <b-form-select class="d-inline item_option_select" v-model="box">
@@ -165,7 +167,7 @@
                                         :value="desc"
                                         :key="idx"
                                     >
-                                        {{desc}} {{item.label}}
+                                        {{desc}}
                                     </b-form-select-option>
                                 </b-form-select>
                             </template>
@@ -173,15 +175,15 @@
         });
 
         Vue.component('product_panel', {
-            props: ['product', 'idx'],
+            props: ['product', 'collection_image', 'update_theme'],
             template:
                    `<b-col class md="4" >
                         <b-card class="h-100 product_card"">
                             <b-card-text class="h5 font-weight-bold product_title">
                                 {{product.title}} \${{product.price}}
                             </b-card-text>
-                            <b-card-img class="collection_image" :src="product.collection_image" alt="Image: collection"></b-card-img>
-
+                            <b-card-img class="collection_image" :src="collection_image" alt="Image: collection"></b-card-img>
+                            
                             <b-row class="mt-2 quantity_row justify-content-between no-gutters">
                                 <template v-if="product.in_stock">
                                     <b-card-text class="text-success mt-2 mr-3">In Stock</b-card-text>
@@ -209,6 +211,7 @@
                                 <b-form-select class="h-100" 
                                     v-model="product.selection_values.theme"
                                     :options="product.card_themes"
+                                    v-on:change="update_theme($event, product)"
                                 >
                                 </b-form-select>
                             </b-row>
@@ -231,6 +234,20 @@
             methods: {
                 onSubmit() {
                     return true;
+                },
+                theme_collection_image(theme_name) {
+                    return this.page.theme_images[theme_name].collection; 
+                },
+                update_theme(new_selection, product) {
+                    // Update the stickers image for the newly-selected theme.
+                    let theme = product.selection_values.theme;
+                    let stickers_image = this.page.theme_images[theme].stickers;
+                    for (let item of product.set_items) {
+                        if (item.item_type === 'stickers') {
+                            item.image = stickers_image;
+                            break;
+                        }
+                    }
                 }
             },        
             data: {
@@ -250,124 +267,163 @@
                         image_alt: "Image: greeting",
                         text: "Yoda best Valentine!"
                     },
+                    theme_images: {
+                        "Puppies & Kittens": {
+                            collection: "./img/dog-cat-valentine.jpg",
+                            stickers:   "./img/puppy-valentine-clipart-8.jpg"
+                        },
+                        "Mickey & Minnie": {
+                            collection: "./img/mickey_minnie_heart_500-428.gif",
+                            stickers: "./img/mickey_minnie_stickers_192x189.png"
+                        },
+                        "Paw Patrol": {
+                            collection: "./img/paw-patrol_400x521.png",
+                            stickers: "./img/paw-patrol-stickers_192x240.png"
+                        },                        
+                        "Disney Cars": {
+                            collection: "./img/cars-disney_400-180.png",
+                            stickers:   "./img/cars-stickers_256-192.jpg"
+                        },         
+                        "JoJo Siwa": {
+                            collection: "./img/jojo-siwa-260-260.jpeg",
+                            stickers: "./img/jojo-siwa-stickers_192x190.jpg"
+                        },  
+                        "Avatar": {
+                            collection: "./img/avatar-image_400x225.jpg",
+                            stickers: "./img/avatar-stickers_192x148.png"
+                        },     
+                        "Batman": {
+                            collection: "./img/batman_400x250.jpg",
+                            stickers: "./img/batman_stickers_192x121.png"
+                        },     
+                        "Superman": {
+                            collection: "./img/superman_400x407.png",
+                            stickers: "./img/superman_stickers_192x166.jpeg"
+                        },       
+                        "Iron Man": {
+                            collection: "./img/iron-man_400x480.png",
+                            stickers: "./img/iron-man-stickers_192x222.png"
+                        },                                                                                            
+                        "Star Wars": {
+                            collection: "./img/yoda-feature.jpg",
+                            stickers:   "./img/stickers-for-kids-star-wars_224x192.png"
+                        }
+                    },
                     "products": [
                         {
-                            "sku": "1000",
-                            "title": "Happy Valentine's!",
-                            "price": 15,
-                            "collection_image": "./img/dog-cat-valentine.jpg",
-                            "in_stock": true,
+                            sku: "1000",
+                            title: "Happy Valentine's!",
+                            price: 15,
+                            in_stock: true,
+                            card_themes: ["Puppies & Kittens", "Mickey & Minnie", "Paw Patrol"],
                             selection_values: 
                             {
                                 quantity: "1",
                                 theme: "Puppies & Kittens",
-                                box: "3x6\" Sturdy Box"
+                                box: "3x6\" Basic Box"
                             },                            
-                            "card_themes": ["Puppies & Kittens", "Mickey & Minnie", "Paw Patrol"],
-                            "set_items": [
+                            set_items: [
                                 {
-                                    "image": "./img/empty-red-box_247x163.jpg",
-                                    "description": ["3x6\" Basic"],
-                                    "label": "Box"
+                                    image: "./img/empty-red-box_247x163.jpg",
+                                    description: ["3x6\" Basic Box"],
+                                    item_type: "box"
                                 },
                                 {
-                                    "image": "./img/4_basic_markers_167x219.png",
-                                    "description": "4 Basic",
-                                    "label": "Markers"
+                                    image: "./img/4_basic_markers_167x219.png",
+                                    description: "4 Basic Markers",
+                                    item_type: "markers"
                                 },
                                 {
-                                    "image": "./img/puppy-valentine-clipart-8.jpg",
-                                    "description": "2",
-                                    "label": "Sticker Sheets"
+                                    image: "./img/puppy-valentine-clipart-8.jpg",
+                                    description: "2 Sticker Sheets",
+                                    item_type: "stickers"
                                 }
                             ]
                         },
                         {
-                            "sku": "2000",
-                            "title": "You Rock!",
-                            "price": 25,
-                            "collection_image": "./img/cars-disney_400-180.png",
-                            "in_stock": false,
+                            sku: "2000",
+                            title: "You Rock!",
+                            price: 25,
+                            in_stock: false,
+                            card_themes: ["Disney Cars", "JoJo Siwa", "Puppies & Kittens",
+                                          "Mickey & Minnie", "Paw Patrol"],                            
                             selection_values: 
                             {
                                 quantity: "1",
                                 theme: "Disney Cars",
                                 box: "10x10\" Sturdy Box"
                             },
-                            "card_themes": ["Disney Cars", "Jojo Siwa", "Puppies & Kittens",
-                                           "Mickey & Minnie", "Paw Patrol"],
-                            "set_items": [
+                            set_items: [
                                 {
-                                    "image": "./img/sturdy_box.png",
-                                    "description": "10x10\" Sturdy",
-                                    "label": "Box"
+                                    image: "./img/sturdy_box.png",
+                                    description: "10x10\" Sturdy Box",
+                                    item_type: "box"
                                 },
                                 {
-                                    "image": "./img/10_deluxe_markers.jpeg",
-                                    "description": "10 Deluxe",
-                                    "label": "Markers"
+                                    image: "./img/10_deluxe_markers.jpeg",
+                                    description: "10 Deluxe Markers",
+                                    item_type: "markers"
                                 },
                                 {
-                                    "image": "./img/cars-stickers_256-192.jpg",
-                                    "description": "4",
-                                    "label": "Sticker Sheets"
+                                    image: "./img/cars-stickers_256-192.jpg",
+                                    description: "4 Sticker Sheets",
+                                    item_type: "stickers"
                                 },
                                 {
-                                    "image": "./img/6_cutouts_192-192.png",
-                                    "description": "6",
-                                    "label": "Valentine Cutouts"
+                                    image: "./img/6_cutouts_192-192.png",
+                                    description: "6 Valentine Cutouts",
+                                    item_type: "cutouts"
                                 },
                                 {
-                                    "image": "./img/4_paints-and-brush_192x155.png",
-                                    "description": "4",
-                                    "label": "Paints"
+                                    image: "./img/4_paints-and-brush_192x155.png",
+                                    description: "4 Paints",
+                                    item_type: "paints"
                                 }
                             ]
                         },
                         {
-                            "sku": "3000",
-                            "title": "Extra Special!",
-                            "price": 50,
-                            "collection_image": "./img/yoda-feature.jpg",
-                            "in_stock": true,
+                            sku: "3000",
+                            title: "Extra Special!",
+                            price: 50,
+                            in_stock: true,
+                            card_themes: ["Avatar", "Batman", "Superman", "Iron Man", "Star Wars", "Disney Cars",
+                                            "JoJo Siwa", "Puppies & Kittens", "Mickey & Minnie", "Paw Patrol"],                            
                             selection_values: 
                             {
                                 quantity: "1",
                                 theme: "Star Wars",
                                 box: "10x10\" Sturdy Box"
                             },                            
-                            "card_themes": ["Avatar", "Batman", "Superman", "Iron Man", "Star Wars", "Disney Cars",
-                                           "Jojo Siwa", "Puppies & Kittens", "Mickey & Minnie", "Paw Patrol"],
-                            "set_items": [
+                            set_items: [
                                 {
-                                    "image": "./img/sturdy_box.png",
-                                    "description": ["10x10\" Sturdy Box", "12x12\" Sturdy Box"],
-                                    "label": "Box"
+                                    image: "./img/sturdy_box.png",
+                                    description: ["10x10\" Sturdy Box", "12x12\" Sturdy Box"],
+                                    item_type: "box"
                                 },
                                 {
-                                    "image": "./img/10_deluxe_markers.jpeg",
-                                    "description": "10 Deluxe",
-                                    "label": "Markers"
+                                    image: "./img/10_deluxe_markers.jpeg",
+                                    description: "10 Deluxe Markers",
+                                    item_type: "markers"
                                 },
                                 {
-                                    "image": "./img/stickers-for-kids-star-wars_224x192.png",
-                                    "description": "6",
-                                    "label": "Sticker Sheets"
+                                    image: "./img/stickers-for-kids-star-wars_224x192.png",
+                                    description: "6 Sticker Sheets",
+                                    item_type: "stickers"
                                 },
                                 {
-                                    "image": "./img/10_cutouts_192-129.png",
-                                    "description": "10",
-                                    "label": "Valentine Cutouts"
+                                    image: "./img/10_cutouts_192-129.png",
+                                    description: "10 Valentine Cutouts",
+                                    item_type: "cutouts"
                                 },
                                 {
-                                    "image": "./img/6_pants_and_brush_192x193.jpeg",
-                                    "description": "6",
-                                    "label": "Paints"
+                                    image: "./img/6_pants_and_brush_192x193.jpeg",
+                                    description: "6 Paints",
+                                    item_type: "paints"
                                 },
                                 {
-                                    "image": "./img/design_templates_229x192.jpg",
-                                    "description": "4",
-                                    "label": "Design Templates"
+                                    image: "./img/design_templates_229x192.jpg",
+                                    description: "4 Design Templates",
+                                    item_type: "templates"
                                 }
                             ]
                         }
