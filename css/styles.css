@@ -158,7 +158,8 @@ footer p {
    width: 80px;
 }
 .checkout_radios {
-   width: 150px;
+   margin-top: -4px;
+   width: 180px;
 }
 .quanty_change_controls {
    border: 1px solid #CCC;
