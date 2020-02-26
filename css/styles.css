@@ -73,9 +73,6 @@ footer p {
    }   
 }
 
-.cart_controls {
-   display: inline-block;
-}
 #cart_container {
    float: right;
    margin-left: 20px;
@@ -95,7 +92,6 @@ footer p {
 .product_card {
    background-color: #FFEEED;
    border: 3px solid rgb(201, 71, 78);
-   *margin-bottom: 5px;
 }
 .product_card:hover {
    border: 2px solid rgb(250, 80, 88);
@@ -111,7 +107,6 @@ footer p {
    display: block;
    width: 130px;
    margin: auto;
-   *border: 1px solid blue;
 }
 .add_to_cart_btn {
    width: 100%;
@@ -147,10 +142,44 @@ footer p {
 .item_desc, .item_option_select {
    display: inline-block;
    width: 180px;   
-   *border: 1px solid green;
 }
 @media (min-width: 751px) and (max-width: 991px) {
    .item_option_select {
       width: 165px;
    }
+}
+
+.cart_image {
+   display: inline-block;
+   width: 77px;
+   height: auto;   
+}
+.checkout_value {
+   width: 80px;
+}
+.checkout_radios {
+   width: 150px;
+}
+.quanty_change_controls {
+   border: 1px solid #CCC;
+   width: 85px;
+   padding: 2px;
+}
+#no_order_text {
+   color: #dc3545;   /* danger */
+}
+.checkout_card {
+   background-color: #FFEEED;
+}
+#checkout_page label {
+   margin-top: 5px;
+}
+#checkout_page .form-control {
+   margin-top: -8px;
+}
+#checkout_page .form-control#address2 {
+   margin-top: 3px;
+}
+.card_half_width {
+   width: 80px;
 }

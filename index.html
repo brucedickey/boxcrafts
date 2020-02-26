@@ -20,7 +20,7 @@
           content="default-src 'self' 'unsafe-inline' 'unsafe-eval' 
                         http://use.fontawesome.com   https://unpkg.com  
                         http://fonts.googleapis.com  https://fonts.gstatic.com;
-                   img-src 'self' data:; child-src 'none'; object-src 'none' " 
+                   img-src 'self' data:; object-src 'none' " 
     />
 
     <title>Valentine's Boxes</title>
@@ -45,7 +45,7 @@
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 </head>
 <body>
-    <div id="app">
+    <b-row id="app">
         <b-container>
             <b-row id="header" class="pt-2 pb-2">
                 <b-col>
@@ -55,60 +55,180 @@
                     <span id="site_title">Valentine's Day Subscription In A Box</span>
                 </b-col>
             </b-row>
-            <b-row class="d-xs-block d-lg-none">
-                <b-col>
-                    {{page.overview.text}}
-                </b-col>
-            </b-row>
-            <b-row class="mt-2 pt-3 pb-3" id="overview_row">
-                <b-col id="overview_col" class="d-none d-lg-block col-lg-9">
-                    <overview_pane :overview="page.overview" :greeting="page.greeting"></overview_pane>
-                </b-col>
 
-                <b-col class="col=md-12 col-lg-3">
-                    <b-form @submit="onCheckoutSubmit" class="clearfix">
-                        <b-form-group id="subscription" class="cart_controls">
-                            <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
-                                            value="subscription" selected 
-                                            class="cart_controls cart_text mr-3">
-                                Subscription
-                            </b-form-radio>
-                            <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
-                                            value="onetime" class="cart_controls cart_text">
-                                One time purchase
-                            </b-form-radio>
-                        </b-form-group>
-                        <div id="cart_container" class="cart_controls">
-                           <b-button class="cart_controls float-right no-gutters ml-3" 
-                                     type="submit" variant="warning">Checkout
+            <div id="home_page" :class="display_home">
+                <b-row class="d-xs-block d-lg-none">
+                    <b-col>
+                        {{page.overview.text}}
+                    </b-col>
+                </b-row>
+                <b-row class="mt-2 pt-3 pb-3" id="overview_row">
+                    <b-col id="overview_col" class="d-none d-lg-block col-lg-9">
+                        <overview_pane :overview="page.overview" :greeting="page.greeting"></overview_pane>
+                    </b-col>
+                    <b-col class="col=md-12 col-lg-3">
+                        <b-form>
+                            <b-form-group id="subscription" class="d-inline-block">
+                                <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
+                                                value="subscription" selected 
+                                                class="d-inline-block mr-3">
+                                    Subscription
+                                </b-form-radio>
+                                <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
+                                                value="onetime" class="d-inline-block">
+                                    One time purchase
+                                </b-form-radio>
+                            </b-form-group>
+                            <div id="cart_container" class="cart_controls">
+                            <b-button class="cart_controls float-right no-gutters ml-3" 
+                                      type="button" variant="warning"
+                                      @click="display_checkout_page($event)" >
+                                Checkout
                             </b-button>
-                           <span class="cart_controls float-right mt-1 mr-2">
-                               <i id="shopping_cart" class="text-primary fas fa-shopping-cart"></i>
-                               {{ cart_item_count() }} 
-                            </span>
+                            <span class="cart_controls float-right mt-1 mr-2">
+                                <i id="shopping_cart" class="text-primary fas fa-shopping-cart"></i>
+                                {{ cart_item_count() }} 
+                                </span>
+                            </div>
+                        </b-form>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col id="choose_msg_col" class="h5 md-12 mt-2 mb-3 text-center font-weight-bold">
+                        <div id="choose_msg" class="pl-5 pr-5 pt-2 pb-2 mx-auto">
+                            <span>3 sets of 25 themed cards to choose from!</span>
                         </div>
-                    </b-form>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col id="choose_msg_col" class="h5 md-12 mt-2 mb-3 text-center font-weight-bold">
-                    <div id="choose_msg" class="pl-5 pr-5 pt-2 pb-2 mx-auto">
-                        <span>3 sets of 25 themed cards to choose from!</span>
-                    </div>
-                </b-col>
-            </b-row>
-            <b-row class="align-items-stretch">
-                <product_panel
-                    v-for="(product, idx) in page.products"
-                    :product="product"
-                    :collection_image="theme_collection_image(product.selection_values.theme)"
-                    :update_theme_stickers_image="update_theme_stickers_image"
-                    :add_to_cart="add_to_cart"
-                    :key="product.id"
-                >
-                </product_panel>
+                    </b-col>
+                </b-row>
+                <b-row class="align-items-stretch">
+                    <product_panel
+                        v-for="(product, idx) in page.products"
+                        :product="product"
+                        :collection_image="theme_collection_image(product.selection_values.theme)"
+                        :update_theme_stickers_image="update_theme_stickers_image"
+                        :update_box_type="update_box_type"
+                        :add_to_cart="add_to_cart"
+                        :key="product.id"
+                    >
+                    </product_panel>
 
-            </b-row>
+                </b-row>
+            </div> <!-- home_page -->
+
+            <b-row id="checkout_page" :class="display_checkout"> 
+                <b-col>
+                    <b-button variant="link" @click="display_home_page($event)">Return to Products</b-button>
+                    <h3 class="d-flex justify-content-center">Checkout</h3>
+                    <br>
+                    <b-row>
+                        <b-col class="col-md-3">
+                            <b-card title="Create an account" sub-title="(optional)" class="checkout_card">
+                                <b-form >
+                                    <label :for="account.email1">Email address</label>
+                                    <b-form-input :id="account.email1" type="email"></b-form-input>
+                                    <label :for="account.email2">Confirm email</label>
+                                    <b-form-input :id="account.email2" type="email"></b-form-input>
+                                    <label :for="account.password">Password</label>
+                                    <b-form-input :id="account.password" type="password"></b-form-input>
+                                </b-form>
+                            </b-card>
+                            <b-card title="Address" class="checkout_card mt-2">
+                                <b-form >
+                                    <label :for="address.name">Name</label>
+                                    <b-form-input :id="address.name" type="text"></b-form-input>
+                                    <label :for="address.address1">Address</label>
+                                    <b-form-input :id="address.address1" type="text"></b-form-input>
+                                    <b-form-input :id="address.address2" type="text" id="address2"></b-form-input>
+                                    <label :for="address.city">City</label>
+                                    <b-form-input :id="address.city" type="text"></b-form-input>
+                                    <label :for="address.state">State</label>
+                                    <b-form-input :id="address.state" type="text"></b-form-input>
+                                    <label :for="address.zip">Zip</label>
+                                    <b-form-input :id="address.zip" type="text"></b-form-input>
+                                    <label :for="address.phone">Phone number</label>
+                                    <b-form-input :id="address.phone" type="tel"></b-form-input>
+                                </b-form>
+                            </b-card>
+                            <b-card title="Payment" class="checkout_card mt-2">
+                                <b-form>
+                                    <label :for="payment.name_on_name">Name on card</label>
+                                    <b-form-input :id="payment.name_on_card" type="text"></b-form-input>
+                                    <label :for="payment.card_number">Credit card number</label>
+                                    <b-form-input :id="payment.card_number" type="text"></b-form-input>
+                                    <div class="d-inline-block card_half_width">    
+                                        <label :for="payment.card_expiration">Expires</label>
+                                        <b-form-input :id="payment.card_expiration" type="text"></b-form-input>
+                                    </div>
+                                    <div class="d-inline-block card_half_width ml-2">
+                                        <label :for="payment.card_security_code">Code</label>
+                                        <b-form-input :id="payment.card_security_code" type="text"></b-form-input>
+                                    </div>
+                                </b-form>
+                            </b-card>
+                        </b-col>
+                        <b-col class="col-md-9">
+                            <h5>Your shopping cart</h5>
+                            <b-list-group>
+                                <ordered_item
+                                    v-for="(item, idx) in cart.items"
+                                    :item="item"
+                                    :idx="idx"
+                                    :key="item.id"
+                                    :increment="increment_quantity"
+                                    :decrement="decrement_quantity"
+                                    :remove_from_cart="remove_from_cart"
+                                >
+                                </ordered_item>
+                            </b-list-group>
+                            <b-row align-h="end"><span class="checkout_label"></span>
+                                <span class="checkout_label">Subtotal:</span>
+                                <span class="checkout_value text-right mr-3">${{ cart_subtotal_str() }}</span>
+                            </b-row>
+                            <b-row align-h="end">
+                                <span class="checkout_label">Shipping:</span>
+                                <span class="checkout_value text-right mr-3">${{ cart_shipping_str() }}</span>
+                            </b-row>
+                            <b-row align-h="end">
+                                <span class="checkout_label">Tax:</span>
+                                <span class="checkout_value text-right mr-3">${{ cart_tax_str() }}</span>
+                            </b-row>
+                            <b-row align-h="end">
+                                <span class="checkout_label font-weight-bold">Total:</span>
+                                <span class="checkout_value font-weight-bold text-right mr-3">${{ cart_total_str() }}</span>
+                            </b-row>
+                            <hr>
+                            <b-row align-h="end">
+                                <span class="checkout_label">Purchase Type:</span>
+                                <span class="checkout_radios text-right mr-3">
+                                    <b-form-group id="subscription">
+                                        <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
+                                                        value="subscription" selected 
+                                                        class="text-left ml-3"
+                                                        v-b-tooltip.hover title="Automatically places the SAME order and charges your card again next February 1st. Current prices are locked-in for five years!">
+                                            Subscription
+                                        </b-form-radio>
+                                        <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
+                                                        value="onetime" class="text-left ml-3">
+                                            One time purchase
+                                        </b-form-radio>
+                                    </b-form-group>                  
+                                </span>
+                            </b-row>      
+                            <hr>
+                            <b-button class="float-right no-gutters ml-3" type="button" variant="warning"
+                                      @click="submit_order"
+                            >
+                                Submit Order
+                            </b-button>
+                            <b-card-text id="no_order_text">
+                                Since this is a static client-side-only demo app, NO ORDER WILL BE PLACED 
+                                and YOUR CARD WILL NOT BE CHARGED.
+                            </b-card-text>
+                        </b-col>
+                    </b-row>
+                </b-col>
+            </b-row> <!-- checkout_page -->
+
             <footer class="mt-3">
                 <b-row class="justify-content-center">
                     <b-col>
@@ -119,9 +239,12 @@
                 </b-row>
             </footer>             
         </b-container>   
-    </div>
+    </b-row>
 
     <script>
+        const SALES_TAX_RATE = 0.06;
+        const SHIPPING_COST  = 4.99;
+
         Vue.component('overview_pane', {
             props: ['overview', 'greeting'],
             template: `<b-row>
@@ -153,22 +276,26 @@
         // Single values to be rendered as text; multiple as a select.
         // Expecting any multiple options to be given as a list of strings.
         Vue.component('product_item', {
-            props: ['item', 'box'],
+            props: ['product', 'item', 'update_box_type'],
+            data () {
+                return {
+                    selected_box: (typeof this.item.description === 'string')? "": this.item.description[0]
+                }
+            },
             template: `<b-row class="mt-2 no-gutters">
-                            <!-- <b-img class="item_image d-md-none d-lg-block mr-2" :src="item.image" alt="Image: item in a collection"></b-img> -->
-
                             <b-img class="item_image mr-2" :src="item.image" alt="Image: item in a collection"></b-img>
                             <br class="d-none d-md-block d-lg-none" />
 
-                            <template v-if="typeof item.description === 'string'" 
-                            class="d-inline item">
+                            <template v-if="typeof item.description === 'string'" class="d-inline item">
                                 <span class="item_desc">{{item.description}}</span>
                             </template>
                             <template v-else-if="item.description.length === 1" class="d-inline">
                                 <span class="item_desc">{{item.description[0]}}</span>
                             </template>
                             <template v-else>
-                                <b-form-select class="d-inline item_option_select" v-model="box">
+                                <b-form-select class="d-inline item_option_select" v-model="selected_box"
+                                               v-on:change="update_box_type($event, product)"
+                                >
                                     <b-form-select-option 
                                         v-for="(desc, idx) in item.description" 
                                         :value="desc"
@@ -182,7 +309,7 @@
         });
 
         Vue.component('product_panel', {
-            props: ['product', 'collection_image', 'update_theme_stickers_image', 'add_to_cart'],
+            props: ['product', 'collection_image', 'update_theme_stickers_image', 'add_to_cart', 'update_box_type'],
             template:
                    `<b-col class md="4" >
                         <b-card class="h-100 product_card"">
@@ -224,11 +351,12 @@
                                 >
                                 </b-form-select>
                             </b-row>
-
+                            
                             <product_item
                                 v-for="item in product.set_items"
+                                :product="product"
                                 :item="item"
-                                :box="product.selection_values.box"
+                                :update_box_type="update_box_type"
                                 :key="item.id"
                             >
                             </product_item>
@@ -236,13 +364,53 @@
                     </b-col>`
         });
 
+        Vue.component('ordered_item', {
+            props: ['item', 'idx', 'increment', 'decrement', 'remove_from_cart'], 
+            template: `
+                <b-list-group-item>
+                    <b-row>
+                        <b-col class="col-md-2">
+                            <b-img :src="item.image" class="cart_image"></b-img> 
+                        </b-col>
+                        <b-col>
+                            <span class="font-weight-bold">"{{item.title}}" kit, \${{item.price}} </span>
+                            <br>
+                            {{item.theme}} theme
+                            <br>
+                            {{item.box}}
+                        </b-col>
+                        <b-col class="col-md-3">
+                            <b-button class="btn-sm mr-3" variant="danger" 
+                                      v-b-tooltip.hover title="Remove item from cart" 
+                                      @click="remove_from_cart($event, idx)"> X </b-button>
+
+                            <div class="quanty_change_controls d-inline-block">
+                                <b-button :disabled="item.decr_btn_class === 'disabled'" class="quantity_btn btn-sm" 
+                                        variant="primary" @click="decrement($event, idx)"> - </b-button>
+                                <span> &nbsp;{{item.quantity}}&nbsp; </span>
+                                <b-button class="quantity_btn btn-sm" variant="primary" @click="increment($event, idx)"> + </b-button>
+                            </div>
+                        </b-col>
+                        <b-col class="col-md-1">
+                            \${{ (item.quantity * item.price).toFixed(2) }}
+                        </b-col>
+                    </b-row>
+                </b-list-group-item>`
+        });
+
         window.app = new Vue({
             el: '#app',
             computed: {
             },
             methods: {
-                onCheckoutSubmit() {
-                    return true;
+                display_home_page(event) {
+                    console.log('Display Home page');
+                    this.display_checkout = 'd-none';
+                    this.display_home = 'd-block';
+                },
+                display_checkout_page(event) {
+                    this.display_home = 'd-none';
+                    this.display_checkout = 'd-block';
                 },
                 theme_collection_image(theme_name) {
                     // Return the theme collection image
@@ -251,7 +419,7 @@
                 },
                 update_theme_stickers_image(new_selection, product) {
                     // Update the stickers image for the newly-selected theme for the current product.
-                    // (The theme collection image is updated via v-model.)
+                    // (On the other hand, the theme collection image is updated via v-model.)
                     let theme = product.selection_values.theme;
                     let stickers_image = this.page.theme_images[theme].stickers;
                     for (let item of product.set_items) {
@@ -261,15 +429,87 @@
                         }
                     }
                 },
+                update_box_type(new_selection, product) {
+                    product.selection_values.box = new_selection;
+                },
                 add_to_cart(product) {
                     let kit = JSON.parse(JSON.stringify(product.selection_values));
-                    this.cart.items.push(kit);
+                    kit.title = product.title;
+                    kit.sku = product.sku;
+                    kit.price = product.price;
+                    kit.image = this.page.theme_images[kit.theme].collection;
+                    kit.decr_btn_class = "";
+
+                    if (this.cart.items.length === 0) {
+                        this.cart.items.push(kit);
+                    }
+                    else {
+                        // Combine like kits for shorter displayed list at checkout, by adding to the quantity.
+                        for (var i = 0; i < this.cart.items.length; i++) {
+                            let item = this.cart.items[i];
+                            if (item.title === kit.title && item.theme === kit.theme && item.box == kit.box) {
+                                item.quantity = parseInt(item.quantity, 10) + parseInt(kit.quantity, 10);
+                                break;
+                            }
+                        }
+                        if (i === this.cart.items.length) {
+                            this.cart.items.push(kit);   // A new type of kit
+                        }                        
+                    }
                 },
                 cart_item_count() {
                     return this.cart.items.reduce((acc, cur) => acc + parseInt(cur.quantity, 10), 0);
-                }
+                },
+                cart_subtotal() {
+                    return this.cart.items.reduce((acc, cur) => acc + parseInt(cur.quantity, 10) * cur.price, 0);
+                },
+                cart_subtotal_str() {
+                    return this.cart_subtotal().toFixed(2);
+                },
+                cart_shipping() {
+                    return (this.cart_subtotal() > 0)? SHIPPING_COST: 0;
+                },
+                cart_shipping_str() {
+                    return this.cart_shipping().toFixed(2);
+                },
+                cart_tax() {
+                    // Shipping cost not taxed in Idaho. 
+                    return this.round(this.cart_subtotal() * SALES_TAX_RATE, 2); 
+                },
+                cart_tax_str() {
+                    return this.cart_tax().toFixed(2);
+                },
+                cart_total_str() {
+                    let total = this.cart_subtotal() + this.cart_shipping() + this.cart_tax();
+                    return total.toFixed(2);
+                },
+                round(value, decimals) {
+                    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+                },
+                increment_quantity(btn, cart_items_idx) {
+                    this.cart.items[cart_items_idx].quantity = parseInt(this.cart.items[cart_items_idx].quantity,10) + 1;
+                    if ( parseInt(this.cart.items[cart_items_idx].quantity, 10) > 0) {
+                        // Enable the item's decrement button
+                        this.cart.items[cart_items_idx].decr_btn_class = "";
+                    }                    
+                },
+                decrement_quantity(btn, cart_items_idx) {
+                    this.cart.items[cart_items_idx].quantity = parseInt(this.cart.items[cart_items_idx].quantity,10) - 1;
+                    if ( parseInt(this.cart.items[cart_items_idx].quantity, 10) === 0) {
+                        // Disable the item's decrement button
+                        this.cart.items[cart_items_idx].decr_btn_class = 'disabled';
+                    }
+                },
+                remove_from_cart(btn, cart_items_idx) {
+                    this.cart.items.splice(cart_items_idx, 1);
+                },
+                submit_order() {
+                    return false;
+                }                
             },        
             data: {
+                display_home: 'd-block',
+                display_checkout: 'd-none',
                 page:
                 {
                     overview: {
@@ -331,7 +571,7 @@
                         {
                             sku: "1000",
                             title: "Happy Valentine's!",
-                            price: 15,
+                            price: 15.00,
                             in_stock: true,
                             card_themes: ["Puppies & Kittens", "Mickey & Minnie", "Paw Patrol"],
                             selection_values: 
@@ -361,7 +601,7 @@
                         {
                             sku: "2000",
                             title: "You Rock!",
-                            price: 25,
+                            price: 25.00,
                             in_stock: false,
                             card_themes: ["Disney Cars", "JoJo Siwa", "Puppies & Kittens",
                                           "Mickey & Minnie", "Paw Patrol"],                            
@@ -402,7 +642,7 @@
                         {
                             sku: "3000",
                             title: "Extra Special!",
-                            price: 50,
+                            price: 50.00,
                             in_stock: true,
                             card_themes: ["Avatar", "Batman", "Superman", "Iron Man", "Star Wars", "Disney Cars",
                                             "JoJo Siwa", "Puppies & Kittens", "Mickey & Minnie", "Paw Patrol"],                            
@@ -449,16 +689,36 @@
                 },
                 cart: {
                     items: [],
-                    subtotal_price: 0,
+                    subtotal: 0,
                     tax: 0,
-                    shipping_cost: 0,
-                    total_price: 0,
+                    shipping: 0,
+                    total: 0,
                     purchase_type: "subscription"
+                },
+                account: {
+                    email1: "",
+                    email2: "",
+                    password: "",
+                    comment: "In real life the form would be posted to the server and the password not stored on the client."
+                },
+                address: {
+                    name: "",
+                    address1: "",
+                    address2: "",
+                    city: "",
+                    state: "",
+                    zip: "",
+                    phone: ""
+                },
+                payment: {
+                    name_on_card: "",
+                    card_number: "",
+                    card_expirtion: "",
+                    card_security_code: "",
+                    comment: "In real life, a payment processing service would be used and card info not stored."
                 }
             }
         })
     </script>
 </body>
 </html>
-
-
