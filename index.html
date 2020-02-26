@@ -198,9 +198,11 @@
                             </b-row>
                             <hr>
                             <b-row align-h="end">
-                                <span class="checkout_label">Purchase Type:</span>
-                                <span class="checkout_radios text-right mr-3">
-                                    <b-form-group id="subscription">
+                                <b-col class="col-md-2">
+                                    <span class="checkout_label">Purchase Type:</span>
+                                </b-col>
+                                <b-col class="col-md-3" >
+                                    <b-form-group class="checkout_radios mr-3">
                                         <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
                                                         value="subscription" selected 
                                                         class="text-left ml-3"
@@ -212,7 +214,7 @@
                                             One time purchase
                                         </b-form-radio>
                                     </b-form-group>                  
-                                </span>
+                                </b-col>
                             </b-row>      
                             <hr>
                             <b-button class="float-right no-gutters ml-3" type="button" variant="warning"
@@ -404,7 +406,6 @@
             },
             methods: {
                 display_home_page(event) {
-                    console.log('Display Home page');
                     this.display_checkout = 'd-none';
                     this.display_home = 'd-block';
                 },
