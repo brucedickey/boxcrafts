@@ -90,7 +90,7 @@ footer p {
    border-radius: 20% / 100% 100% 0 0;
 }
 .product_card {
-   background-color: #FFEEED;
+   background-color: #F4F4F4;
    border: 3px solid rgb(201, 71, 78);
 }
 .product_card:hover {
@@ -170,7 +170,7 @@ footer p {
    color: #dc3545;   /* danger */
 }
 .checkout_card {
-   background-color: #FFEEED;
+   background-color: #F4F4F4;
 }
 #checkout_page label {
    margin-top: 5px;

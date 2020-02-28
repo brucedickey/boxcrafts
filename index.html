@@ -56,7 +56,7 @@
                 </b-col>
             </b-row>
 
-            <div id="home_page" :class="display_home">
+            <div v-if="displayed_page === 'home'" id="home_page">
                 <b-row class="d-xs-block d-lg-none">
                     <b-col>
                         {{page.overview.text}}
@@ -115,7 +115,7 @@
                 </b-row>
             </div> <!-- home_page -->
 
-            <b-row id="checkout_page" :class="display_checkout"> 
+            <b-row v-else-if="displayed_page === 'checkout'" id="checkout_page"> 
                 <b-col>
                     <b-button variant="link" @click="display_home_page($event)">Return to Products</b-button>
                     <h3 class="d-flex justify-content-center">Checkout</h3>
@@ -406,12 +406,10 @@
             },
             methods: {
                 display_home_page(event) {
-                    this.display_checkout = 'd-none';
-                    this.display_home = 'd-block';
+                    this.displayed_page = 'home';
                 },
                 display_checkout_page(event) {
-                    this.display_home = 'd-none';
-                    this.display_checkout = 'd-block';
+                    this.displayed_page = 'checkout';
                 },
                 theme_collection_image(theme_name) {
                     // Return the theme collection image
@@ -509,8 +507,7 @@
                 }                
             },        
             data: {
-                display_home: 'd-block',
-                display_checkout: 'd-none',
+                displayed_page: 'home',
                 page:
                 {
                     overview: {
@@ -528,43 +525,43 @@
                     },
                     theme_images: {
                         "Puppies & Kittens": {
-                            collection: "./img/dog-cat-valentine.jpg",
+                            collection: "./img/dog-cat-valentine_400x400.jpg",
                             stickers:   "./img/puppy-valentine-clipart-8.jpg"
                         },
                         "Mickey & Minnie": {
-                            collection: "./img/mickey_minnie_heart_500-428.gif",
+                            collection: "./img/mickey_minnie_heart_400x400.gif",
                             stickers: "./img/mickey_minnie_stickers_192x189.png"
                         },
                         "Paw Patrol": {
-                            collection: "./img/paw-patrol_400x521.png",
+                            collection: "./img/paw-patrol_400x400.png",
                             stickers: "./img/paw-patrol-stickers_192x240.png"
                         },                        
                         "Disney Cars": {
-                            collection: "./img/cars-disney_400-180.png",
+                            collection: "./img/cars-disney_400x400.png",
                             stickers:   "./img/cars-stickers_256-192.jpg"
                         },         
                         "JoJo Siwa": {
-                            collection: "./img/jojo-siwa-260-260.jpeg",
+                            collection: "./img/jojo-siwa-400x400.jpg",
                             stickers: "./img/jojo-siwa-stickers_192x190.jpg"
                         },  
                         "Avatar": {
-                            collection: "./img/avatar-image_400x225.jpg",
+                            collection: "./img/avatar-image_400x400.jpg",
                             stickers: "./img/avatar-stickers_192x148.png"
                         },     
                         "Batman": {
-                            collection: "./img/batman_400x250.jpg",
+                            collection: "./img/batman_400x400.jpg",
                             stickers: "./img/batman_stickers_192x121.png"
                         },     
                         "Superman": {
-                            collection: "./img/superman_400x407.png",
+                            collection: "./img/superman_400x400.png",
                             stickers: "./img/superman_stickers_192x166.jpeg"
                         },       
                         "Iron Man": {
-                            collection: "./img/iron-man_400x480.png",
+                            collection: "./img/iron-man_400x400.png",
                             stickers: "./img/iron-man-stickers_192x222.png"
                         },                                                                                            
                         "Star Wars": {
-                            collection: "./img/yoda-feature.jpg",
+                            collection: "./img/the-child-vday_400x400.png",
                             stickers:   "./img/stickers-for-kids-star-wars_224x192.png"
                         }
                     },
