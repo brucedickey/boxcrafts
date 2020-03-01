@@ -184,3 +184,7 @@ footer p {
 .card_half_width {
    width: 80px;
 }
+#payment_card .card-subtitle.text-muted {
+   /* Grrr! Bootstrap 4 uses `!important` on .text-muted, which is light gray. */
+   color: red !important;
+}

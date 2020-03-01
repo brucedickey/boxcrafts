@@ -149,19 +149,27 @@
                                     <b-form-input :id="address.phone" type="tel"></b-form-input>
                                 </b-form>
                             </b-card>
-                            <b-card title="Payment" class="checkout_card mt-2">
+                            <b-card id="payment_card" title="Payment" sub-title="(don't enter real data)" class="checkout_card mt-2">
                                 <b-form>
-                                    <label :for="payment.name_on_name">Name on card</label>
-                                    <b-form-input :id="payment.name_on_card" type="text"></b-form-input>
-                                    <label :for="payment.card_number">Credit card number</label>
-                                    <b-form-input :id="payment.card_number" type="text"></b-form-input>
+                                    <label :for="name_on_name">Name on card</label>
+                                    <b-form-input :id="name_on_card" v-model="payment.name_on_card" 
+                                        type="text">
+                                    </b-form-input>
+                                    <label :for="card_number">Credit card number</label>
+                                    <b-form-input :id="card_number" v-model="payment.card_number" 
+                                        type="text">
+                                    </b-form-input>
                                     <div class="d-inline-block card_half_width">    
-                                        <label :for="payment.card_expiration">Expires</label>
-                                        <b-form-input :id="payment.card_expiration" type="text"></b-form-input>
+                                        <label :for="card_expiration">Expires</label>
+                                        <b-form-input :id="card_expiration" v-model="payment.card_expiration"
+                                            type="text">
+                                        </b-form-input>
                                     </div>
                                     <div class="d-inline-block card_half_width ml-2">
-                                        <label :for="payment.card_security_code">Code</label>
-                                        <b-form-input :id="payment.card_security_code" type="text"></b-form-input>
+                                        <label :for="card_security_code">Code</label>
+                                        <b-form-input :id="card_security_code" v-model="payment.card_security_code" 
+                                            type="text">
+                                        </b-form-input>
                                     </div>
                                 </b-form>
                             </b-card>
@@ -434,10 +442,10 @@
                 add_to_cart(product) {
                     let kit = JSON.parse(JSON.stringify(product.selection_values));
                     kit.title = product.title;
-                    kit.sku = product.sku;
+                    kit.sku   = product.sku;
                     kit.price = product.price;
                     kit.image = this.page.theme_images[kit.theme].collection;
-                    kit.decr_btn_class = "";
+                    kit.decr_btn_class = "";   // For enabling/disabling
 
                     if (this.cart.items.length === 0) {
                         this.cart.items.push(kit);
@@ -473,7 +481,7 @@
                 },
                 cart_tax() {
                     // Shipping cost not taxed in Idaho. 
-                    return this.round(this.cart_subtotal() * SALES_TAX_RATE, 2); 
+                    return this.round2(this.cart_subtotal() * SALES_TAX_RATE); 
                 },
                 cart_tax_str() {
                     return this.cart_tax().toFixed(2);
@@ -482,8 +490,9 @@
                     let total = this.cart_subtotal() + this.cart_shipping() + this.cart_tax();
                     return total.toFixed(2);
                 },
-                round(value, decimals) {
-                    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+                round2(value) {
+                    // https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
+                    return Math.round( value * 100 + Number.EPSILON ) / 100;
                 },
                 increment_quantity(btn, cart_items_idx) {
                     this.cart.items[cart_items_idx].quantity = parseInt(this.cart.items[cart_items_idx].quantity,10) + 1;
@@ -709,10 +718,10 @@
                     phone: ""
                 },
                 payment: {
-                    name_on_card: "",
-                    card_number: "",
-                    card_expirtion: "",
-                    card_security_code: "",
+                    name_on_card: "Jar Jar Binks",
+                    card_number: "1234-5678-8765-4321",
+                    card_expiration: "12/99",
+                    card_security_code: "123",
                     comment: "In real life, a payment processing service would be used and card info not stored."
                 }
             }
