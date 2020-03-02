@@ -232,7 +232,7 @@
                             </b-button>
                             <b-card-text id="no_order_text">
                                 Since this is a static client-side-only demo app, NO ORDER WILL BE PLACED 
-                                and YOUR CARD WILL NOT BE CHARGED.
+                                and NO ATTEMPT will be made to charge the credit card. Use bogus card data for this demo.
                             </b-card-text>
                         </b-col>
                     </b-row>
@@ -719,10 +719,12 @@
                 },
                 payment: {
                     name_on_card: "Jar Jar Binks",
-                    card_number: "1234-5678-8765-4321",
+                    card_number: "4012 8888 8888 1881",
                     card_expiration: "12/99",
-                    card_security_code: "123",
-                    comment: "In real life, a payment processing service would be used and card info not stored."
+                    card_security_code: "999",
+                    comment0: "https://developer.authorize.net/hello_world/testing_guide.html",
+                    comment1: "https://www.web-payment-software.com/test-credit-card-numbers/",
+                    comment2: "In real life, a payment processing service would be used and card info not stored."
                 }
             }
         })
