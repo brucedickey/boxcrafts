@@ -149,25 +149,25 @@
                                     <b-form-input :id="address.phone" type="tel"></b-form-input>
                                 </b-form>
                             </b-card>
-                            <b-card id="payment_card" title="Payment" sub-title="(don't enter real data)" class="checkout_card mt-2">
+                            <b-card id="payment_card" title="Payment" sub-title="(use this test data)" class="checkout_card mt-2">
                                 <b-form>
-                                    <label :for="name_on_name">Name on card</label>
-                                    <b-form-input :id="name_on_card" v-model="payment.name_on_card" 
+                                    <label :for="payment.name_on_card">Name on card</label>
+                                    <b-form-input :id="payment.name_on_card" v-model="payment.name_on_card"
                                         type="text">
                                     </b-form-input>
-                                    <label :for="card_number">Credit card number</label>
-                                    <b-form-input :id="card_number" v-model="payment.card_number" 
+                                    <label :for="payment.card_number">Credit card number</label>
+                                    <b-form-input :id="payment.card_number" v-model="payment.card_number" 
                                         type="text">
                                     </b-form-input>
                                     <div class="d-inline-block card_half_width">    
-                                        <label :for="card_expiration">Expires</label>
-                                        <b-form-input :id="card_expiration" v-model="payment.card_expiration"
+                                        <label :for="payment.card_expiration">Expires</label>
+                                        <b-form-input :id="payment.card_expiration" v-model="payment.card_expiration"
                                             type="text">
                                         </b-form-input>
                                     </div>
                                     <div class="d-inline-block card_half_width ml-2">
-                                        <label :for="card_security_code">Code</label>
-                                        <b-form-input :id="card_security_code" v-model="payment.card_security_code" 
+                                        <label :for="payment.card_security_code">Code</label>
+                                        <b-form-input :id="payment.card_security_code" v-model="payment.card_security_code" 
                                             type="text">
                                         </b-form-input>
                                     </div>
@@ -232,7 +232,8 @@
                             </b-button>
                             <b-card-text id="no_order_text">
                                 Since this is a static client-side-only demo app, NO ORDER WILL BE PLACED 
-                                and NO ATTEMPT will be made to charge the credit card. Use bogus card data for this demo.
+                                and NO ATTEMPT will be made to charge the credit card. Use the pre-filled 
+                                test card data for this demo.
                             </b-card-text>
                         </b-col>
                     </b-row>
