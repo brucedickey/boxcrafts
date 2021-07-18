@@ -56,39 +56,38 @@
                 </b-col>
             </b-row>
 
-            <div v-if="displayed_page === 'home'" id="home_page">
-                <b-row class="d-xs-block d-lg-none">
+            <div v-if="displayed_page === 'home'" id="home_page" class="m-3">
+                <b-row class="d-xs-block d-lg-none" id="overview_text_row">
                     <b-col>
                         {{page.overview.text}}
                     </b-col>
                 </b-row>
-                <b-row class="mt-2 pt-3 pb-3" id="overview_row">
+                <b-row class="m-1 mt-2 pt-3 pb-3" id="overview_row">
                     <b-col id="overview_col" class="d-none d-lg-block col-lg-9">
                         <overview_pane :overview="page.overview" :greeting="page.greeting"></overview_pane>
                     </b-col>
                     <b-col class="col=md-12 col-lg-3">
-                        <b-form>
-                            <b-form-group id="subscription" class="d-inline-block">
+                        <b-form id="checkout_form">
+                            <b-form-group id="checkout_radios_form_group">
                                 <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
-                                                value="subscription" selected 
-                                                class="d-inline-block mr-3">
+                                                value="subscription" selected>
                                     Subscription
                                 </b-form-radio>
                                 <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
-                                                value="onetime" class="d-inline-block">
+                                                value="onetime">
                                     One time purchase
                                 </b-form-radio>
                             </b-form-group>
-                            <div id="cart_container" class="cart_controls">
-                            <b-button class="cart_controls float-right no-gutters ml-3" 
-                                      type="button" variant="warning"
-                                      @click="display_checkout_page($event)" >
-                                Checkout
-                            </b-button>
-                            <span class="cart_controls float-right mt-1 mr-2">
-                                <i id="shopping_cart" class="text-primary fas fa-shopping-cart"></i>
-                                {{ cart_item_count() }} 
+                            <div id="cart_container">
+                                <span class="mt-1">
+                                    <i id="shopping_cart" class="text-primary fas fa-shopping-cart"></i>
+                                    {{ cart_item_count() }} 
                                 </span>
+                                <b-button id="checkout_btn" class="ml-3"
+                                        type="button" variant="warning"
+                                        @click="display_checkout_page($event)" >
+                                    Checkout
+                                </b-button>
                             </div>
                         </b-form>
                     </b-col>
@@ -210,7 +209,7 @@
                                     <span class="checkout_label">Purchase Type:</span>
                                 </b-col>
                                 <b-col class="col-md-3" >
-                                    <b-form-group class="checkout_radios mr-3">
+                                    <b-form-group id="submit_radios_form_group">
                                         <b-form-radio v-model="cart.purchase_type" name="purchase_type_radios" 
                                                         value="subscription" selected 
                                                         class="text-left ml-3"
@@ -225,7 +224,7 @@
                                 </b-col>
                             </b-row>      
                             <hr>
-                            <b-button class="float-right no-gutters ml-3" type="button" variant="warning"
+                            <b-button id="submit_btn" class="no-gutters ml-3" type="button" variant="warning"
                                       @click="submit_order"
                             >
                                 Submit Order
@@ -264,7 +263,7 @@
                                         id="overview_image" class="img-fluid mb-2">
                                 </b-img>
                             </b-col>
-                            <b-col class md="7">
+                            <b-col class md="8">
                                 <b-row class="d-none d-lg-block">
                                     <div class="d-flex justify-content-center">
                                         <b-card-img class="d-inline" id="greeting_image" 
@@ -329,20 +328,24 @@
                             </b-card-text>
                             <b-card-img class="collection_image" :src="collection_image" alt="Image: collection"></b-card-img>
                             
-                            <b-row class="mt-2 quantity_row justify-content-between no-gutters">
-                                <template v-if="product.in_stock">
-                                    <b-card-text class="text-success mt-2 mr-3">In Stock</b-card-text>
-                                </template>
-                                <template v-else>
-                                    <b-card-text class="text-danger mt-2 mr-3">Out</b-card-text>
-                                </template>
-                                <b-form-select class="product_qty" v-model="product.selection_values.quantity">
-                                    <b-form-select-option value="1">Qty 1</b-form-select-option>
-                                    <b-form-select-option value="2">Qty 2</b-form-select-option>
-                                    <b-form-select-option value="3">Qty 3</b-form-select-option>
-                                    <b-form-select-option value="4">Qty 4</b-form-select-option>
-                                    <b-form-select-option value="5">Qty 5</b-form-select-option>
-                                </b-form-select>
+                            <b-row class="quantity_row justify-content-between">
+                                <b-col class="col-md-4 product_status">
+                                    <template v-if="product.in_stock">
+                                        <b-card-text class="text-success">In Stock</b-card-text>
+                                    </template>
+                                    <template v-else>
+                                        <b-card-text class="text-danger">Out</b-card-text>
+                                    </template>
+                                </b-col> 
+                                <b-col class="col-md-4 product_qty_div">   
+                                    <b-form-select class="product_qty" v-model="product.selection_values.quantity">
+                                        <b-form-select-option value="1">Qty 1</b-form-select-option>
+                                        <b-form-select-option value="2">Qty 2</b-form-select-option>
+                                        <b-form-select-option value="3">Qty 3</b-form-select-option>
+                                        <b-form-select-option value="4">Qty 4</b-form-select-option>
+                                        <b-form-select-option value="5">Qty 5</b-form-select-option>
+                                    </b-form-select>
+                                </b-col>
                             </b-row>
                             <template v-if="product.in_stock">
                                 <b-button class="add_to_cart_btn mb-2" variant="warning" @click="add_to_cart(product)">
@@ -354,13 +357,15 @@
                             </template>
 
                             <b-card-text class="choose_theme">Choose a theme:</b-card-text>
-                            <b-row class="theme_row no-gutters">
-                                <b-form-select class="h-100" 
-                                    v-model="product.selection_values.theme"
-                                    :options="product.card_themes"
-                                    v-on:change="update_theme_stickers_image($event, product)"
-                                >
-                                </b-form-select>
+                            <b-row class="theme_row">
+                                <b-col>
+                                    <b-form-select class="h-100 theme_select" 
+                                        v-model="product.selection_values.theme"
+                                        :options="product.card_themes"
+                                        v-on:change="update_theme_stickers_image($event, product)"
+                                    >
+                                    </b-form-select>
+                                </b-col>
                             </b-row>
                             
                             <product_item
@@ -481,7 +486,7 @@
                     return this.cart_shipping().toFixed(2);
                 },
                 cart_tax() {
-                    // Shipping cost not taxed in Idaho. 
+                    // Shipping cost not taxed in Idaho, where this was written... 
                     return this.round2(this.cart_subtotal() * SALES_TAX_RATE); 
                 },
                 cart_tax_str() {
@@ -526,12 +531,12 @@
                         text: `Handmade Valentine's cards show how much you care and with our kits they are easy and fun! 
                                We provide everything you need to turn 25 starter cards and a stylable box into unique 
                                and attractive gifts that your classmates will enjoy. Markers and paints are completely
-                               washable.`
+                               washable.`,
                     },
                     greeting: {
                         image: "./img/transparent-background-yoda-clipart_230-192.png",
                         image_alt: "Image: greeting",
-                        text: "Yoda best Valentine!"
+                        text: "-- Yoda best Valentine!"
                     },
                     theme_images: {
                         "Puppies & Kittens": {
@@ -550,9 +555,9 @@
                             collection: "./img/cars-disney_400x400.png",
                             stickers:   "./img/cars-stickers_256-192.jpg"
                         },         
-                        "JoJo Siwa": {
-                            collection: "./img/jojo-siwa-400x400.png",
-                            stickers: "./img/jojo-siwa-stickers_192x190.jpg"
+                        "Tom and Jerry": {
+                            collection: "./img/tom_and_jerry_400x400.jpg",
+                            stickers: "./img/tom_and_jerry_stickers_172x192.jpg"
                         },  
                         "Avatar": {
                             collection: "./img/avatar-image_400x400.png",
@@ -611,7 +616,7 @@
                             title: "You Rock!",
                             price: 25.00,
                             in_stock: false,
-                            card_themes: ["Disney Cars", "JoJo Siwa", "Puppies & Kittens",
+                            card_themes: ["Disney Cars", "Tom and Jerry", "Puppies & Kittens",
                                           "Mickey & Minnie", "Paw Patrol"],                            
                             selection_values: 
                             {
@@ -653,7 +658,7 @@
                             price: 50.00,
                             in_stock: true,
                             card_themes: ["Avatar", "Batman", "Superman", "Iron Man", "Star Wars", "Disney Cars",
-                                            "JoJo Siwa", "Puppies & Kittens", "Mickey & Minnie", "Paw Patrol"],                            
+                                            "Tom and Jerry", "Puppies & Kittens", "Mickey & Minnie", "Paw Patrol"],                            
                             selection_values: 
                             {
                                 quantity: "1",
